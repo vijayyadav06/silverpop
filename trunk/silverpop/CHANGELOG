@@ -1,0 +1,12 @@
+2009-05-08  Hans-Peter Locher <hans-peter.locher@inquant.de>
+
+    * api.py (select_recipient_data): 
+		created, currently returns always True
+    * api.py (is_opted_in): 
+		created, currently returns always True
+    * api.py (opt_out_recipient): 
+		created, currently returns always True
+    * api.py (select_recipient_data): 
+		created, currently returns '<tobedone>foo</tobedone>'
+    * api.py (xml_request): 
+		created, currently returns '<tobedone>foo</tobedone>'
