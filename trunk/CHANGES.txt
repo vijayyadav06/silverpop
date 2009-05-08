@@ -1,0 +1,7 @@
+Changelog
+*********
+
+trunk (0.1dev)
+--------------
+
+- initial package skeleton [hplocher]
