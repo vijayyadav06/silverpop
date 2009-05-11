@@ -4,10 +4,12 @@ Changelog
 trunk (0.1dev)
 --------------
 
-- mocked api methods:
+- implemented api methods:
     add_recipient(api_url, list_id, email, columns=[])
-    is_opted_in(api_url, list_id, email)
     opt_out_recipient(api_url, list_id, email)
+    [hplocher]
+- mocked api methods:
+    is_opted_in(api_url, list_id, email)
     select_recipient_data(api_url, list_id, email, columns=[])
     xml_request(api_url, xml)
     [hplocher]
