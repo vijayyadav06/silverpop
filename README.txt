@@ -13,10 +13,22 @@ Currently implemented API methods::
            returns True or False
         """
 
+    def is_opted_in(api_url, list_id, email):
+        """Is the specified email opted in to the list?
+           api_url, list_id, email are required
+           returns True or False
+        """
+
     def opt_out_recipient(api_url, list_id, email):
         """opt out a recipient from a list
            api_url, list_id, email are required
            returns True or False
+        """
+
+    def select_recipient_data(api_url, list_id, email, columns=[]):
+        """get the recipients data
+           api_url, list_id, email are required
+           returns the silverpop response (xml)
         """
 
     def xml_request(api_url, xml):

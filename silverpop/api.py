@@ -95,8 +95,14 @@ def is_opted_in(api_url, list_id, email):
        api_url, list_id, email are required
        returns True or False
     """
-
-    return True
+    response = select_recipient_data(api_url, list_id, email)
+    result = response.lower()
+    if '<success>false</success>' in result:
+        return False
+    elif '<OptedOut/>' in result:
+        return True
+    else:
+        return False
 
 
 def opt_out_recipient(api_url, list_id, email):
@@ -118,10 +124,31 @@ def opt_out_recipient(api_url, list_id, email):
 def select_recipient_data(api_url, list_id, email, columns=[]):
     """get the recipients data
        api_url, list_id, email are required
-       returns a string (xml)
+       returns the silverpop response (xml)
     """
+    parts = []
+    parts.append("""<Envelope>
+  <Body>
+    <SelectRecipientData>
+       <LIST_ID>%s</LIST_ID>
+       <EMAIL>%s</EMAIL>""" % (list_id, email)
+          )
 
-    return '<tobedone>foo</tobedone>'
+    for column in columns:
+        parts.append("""
+       <COLUMN>
+         <NAME>%s</NAME>
+         <VALUE>%s</VALUE>
+       </COLUMN>""" % (column['column_name'], column['column_value'])
+              )
+
+    parts.append("""
+    </SelectRecipientData>
+  </Body>
+</Envelope>"""
+        )
+    xml = "".join(parts)
+    return xml_request(api_url, xml)
 
 
 def xml_request(api_url, xml):
