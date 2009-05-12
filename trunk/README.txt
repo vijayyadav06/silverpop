@@ -19,4 +19,10 @@ Currently implemented API methods::
            returns True or False
         """
 
+    def xml_request(api_url, xml):
+        """submit a custom xml request
+           api_url, xml, are required
+           returns a string (xml)
+        """
+
 - Silverpop: http://www.silverpop.com/
