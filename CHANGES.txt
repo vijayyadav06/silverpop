@@ -5,6 +5,7 @@ trunk (0.2dev)
 --------------
 
 - refactored [hplocher]
+- implemented xml_request(api_url, xml) [hplocher]
 
 0.1 (2009-05-12)
 ----------------
