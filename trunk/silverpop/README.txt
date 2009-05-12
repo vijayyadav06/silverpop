@@ -142,6 +142,194 @@ Let's call the opt_out_recipient api with the required attributes::
     ---------------------------------------------------------------------------
     True
 
+is_opted_in
++++++++++++
+
+This method returns **True** when the specified email is a
+non-opted out recipient of a list. 
+If the list doesn't exist, or
+the user isn't a recipient of an existing list, or 
+the user is opted out form the specified list, 
+it should return **False**.
+
+For this test we need to interpret the various responses,
+which we could get from silverpop, so we are going to change 
+in more detail, so we change our Fake class simulating, the different Silverpop
+responses.
+
+First, we assume that we have specified a non existing list_id
+(is_opted_in should return False)::
+
+    >>> class Fake(object):
+    ...     def read(self): return """
+    ...         <Envelope>
+    ...           <Body>
+    ...             <RESULT>
+    ...                 <SUCCESS>false</SUCCESS>
+    ...             </RESULT>
+    ...             <Fault>
+    ...               <Request/>
+    ...               <FaultCode/>
+    ...               <FaultString>
+    ...                 <![CDATA[List with id 999 Does Not Exist.]]>
+    ...               </FaultString>
+    ...               <detail>
+    ...                 <error>
+    ...                   <errorid>108</errorid>
+    ...                   <module/>
+    ...                   <class>SP.ListManager</class>
+    ...                   <method/>
+    ...                 </error>
+    ...                </detail>
+    ...               </Fault>
+    ...             </Body>
+    ...         </Envelope>
+    ...         """
+
+    >>> silverpop.is_opted_in(api_url, list_id, email)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <SelectRecipientData>
+           <LIST_ID>999</LIST_ID>
+           <EMAIL>my@email.com</EMAIL>
+        </SelectRecipientData>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    False
+
+Now, we specify a list_id which is not valid (it must be an integer)::
+
+    >>> class Fake(object):
+    ...     def read(self): return """
+    ...         <Envelope>
+    ...           <Body>
+    ...             <RESULT>
+    ...                 <SUCCESS>false</SUCCESS>
+    ...             </RESULT>
+    ...             <Fault>
+    ...               <Request/>
+    ...               <FaultCode/>
+    ...               <FaultString>
+    ...                 <![CDATA[List ID is not valid.]]>
+    ...               </FaultString>
+    ...               <detail>
+    ...                 <error>
+    ...                   <errorid>106</errorid>
+    ...                   <module/>
+    ...                   <class>SP.ListManager</class>
+    ...                   <method/>
+    ...                 </error>
+    ...                </detail>
+    ...               </Fault>
+    ...             </Body>
+    ...         </Envelope>
+    ...         """
+
+    >>> silverpop.is_opted_in(api_url, 'NOT AN INTEGER', email)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <SelectRecipientData>
+           <LIST_ID>NOT AN INTEGER</LIST_ID>
+           <EMAIL>my@email.com</EMAIL>
+        </SelectRecipientData>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    False
+
+Now, we assume the provided email is not a member of the list::
+
+    >>> class Fake(object):
+    ...     def read(self): return """
+    ...         <Envelope>
+    ...           <Body>
+    ...             <RESULT>
+    ...                 <SUCCESS>false</SUCCESS>
+    ...             </RESULT>
+    ...             <Fault>
+    ...               <Request/>
+    ...               <FaultCode/>
+    ...               <FaultString>
+    ...                 <![CDATA[Recipient is not a member of the list.]]>
+    ...               </FaultString>
+    ...               <detail>
+    ...                 <error>
+    ...                   <errorid>128</errorid>
+    ...                   <module/>
+    ...                   <class>SP.ListManager</class>
+    ...                   <method/>
+    ...                 </error>
+    ...                </detail>
+    ...               </Fault>
+    ...             </Body>
+    ...         </Envelope>
+    ...         """
+
+    >>> silverpop.is_opted_in(api_url, list_id, email)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <SelectRecipientData>
+           <LIST_ID>999</LIST_ID>
+           <EMAIL>my@email.com</EMAIL>
+        </SelectRecipientData>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    False
+
+Now, we assume the provided email is a member of the list, but the member is opted out
+(leading to a value in the **<OptedOut>** column)::
+
+    >>> class Fake(object):
+    ...     def read(self): return """
+    ...         <Envelope>
+    ...           <Body>
+    ...             <RESULT>
+    ...               <SUCCESS>TRUE</SUCCESS>
+    ...               <EMAIL>my@email.com</EMAIL>
+    ...               <Email>my@email.com</Email>
+    ...               <RecipientId>5</RecipientId>
+    ...               <EmailType>0</EmailType>
+    ...               <LastModified>5/11/09 9:43 AM</LastModified>
+    ...               <CreatedFrom>2</CreatedFrom>
+    ...               <OptedIn>3/26/09 10:29 AM</OptedIn>
+    ...               <OptedOut>5/11/09 9:43 AM</OptedOut>
+    ...               <COLUMNS>
+    ...                 <COLUMN>
+    ...                   <NAME>State</NAME>
+    ...                   <VALUE>Germany</VALUE>
+    ...                 </COLUMN>
+    ...               </COLUMNS>
+    ...             </RESULT>
+    ...           </Body>
+    ...         </Envelope>
+    ...         """
+
+    >>> silverpop.is_opted_in(api_url, list_id, email)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <SelectRecipientData>
+           <LIST_ID>999</LIST_ID>
+           <EMAIL>my@email.com</EMAIL>
+        </SelectRecipientData>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    False
+
 xml_request
 +++++++++++
 
@@ -150,6 +338,11 @@ of which we only implement a subset.
 If you need to make different requests you can use this method to
 submit custom xml to Silverpop. As result, you will get the Silverpop
 Response, which is also xml.
+
+For this test, we want to have a simple xml as reply from Silverpop::
+
+    >>> class Fake(object):
+    ...     def read(self): return "<silverpop_response>true</silverpop_response>"
 
 Imagine, we want to use the **ForwardToFrient** xml command. 
 
@@ -185,4 +378,4 @@ The xml is sent to Silverpop and we get the response back, for further processin
       </Body>
      </Envelope>
     ---------------------------------------------------------------------------
-    '<success>true</success>'
+    '<silverpop_response>true</silverpop_response>'

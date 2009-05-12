@@ -4,7 +4,11 @@ Changelog
 trunk (0.3dev)
 --------------
 
-- no changes yet
+- implemented api methods:
+    is_opted_in(api_url, list_id, email)
+    select_recipient_data(api_url, list_id, email, columns=[])
+    [hplocher]
+
 
 0.2 (2009-05-12)
 ----------------
