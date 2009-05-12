@@ -25,16 +25,18 @@ Currently implemented API methods::
            returns True or False
         """
 
-    def select_recipient_data(api_url, list_id, email, columns=[]):
+    def select_recipient_data(api_url, list_id, email, column=None):
         """get the recipients data
            api_url, list_id, email are required
+           you may specify a column dict for non email key lists, like
+           {'column_name': 'USER_ID', 'column_value': '4711'}
            returns the silverpop response (xml)
         """
 
     def xml_request(api_url, xml):
         """submit a custom xml request
            api_url, xml, are required
-           returns a string (xml)
+           returns the silverpop response (xml)
         """
 
 - Silverpop: http://www.silverpop.com/

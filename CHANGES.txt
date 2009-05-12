@@ -1,12 +1,12 @@
 Changelog
 *********
 
-trunk (0.3dev)
---------------
+0.3 (2009-05-12)
+----------------
 
 - implemented api methods:
     is_opted_in(api_url, list_id, email)
-    select_recipient_data(api_url, list_id, email, columns=[])
+    select_recipient_data(api_url, list_id, email, column=None)
     [hplocher]
 
 
