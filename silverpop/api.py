@@ -33,11 +33,9 @@ def info(msg):
     logging.getLogger(LOGGER).info(msg)
 
 
-def submit_to_silverpop(request):
+def submit_to_silverpop(api_url, xml):
     """submit a request to silverpop"""
-    handle = urllib2.urlopen(request)
-    response = handle.read()
-    info('Silverpop API response: %s' % response)
+    response = xml_request(api_url, xml)
     result = response.lower()
     if '<success>true</success>' in result:
         return True
@@ -83,11 +81,7 @@ def add_recipient(api_url, list_id, email, columns=[]):
 </Envelope>"""
         )
     xml = "".join(parts)
-    info('xml: %s' % xml)
-    headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
-    xml = urllib.urlencode({'xml': xml})
-    req = urllib2.Request(api_url, xml, headers)
-    return submit_to_silverpop(req)
+    return submit_to_silverpop(api_url, xml)
 
 
 def is_opted_in(api_url, list_id, email):
@@ -112,11 +106,7 @@ def opt_out_recipient(api_url, list_id, email):
     </OptOutRecipient>
   </Body>
 </Envelope>""" % (list_id, email)
-    info('xml: %s' % xml)
-    headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
-    xml = urllib.urlencode({'xml': xml})
-    req = urllib2.Request(api_url, xml, headers)
-    return submit_to_silverpop(req)
+    return submit_to_silverpop(api_url, xml)
 
 
 def select_recipient_data(api_url, list_id, email, columns=[]):
@@ -133,7 +123,16 @@ def xml_request(api_url, xml):
        api_url, xml, are required
        returns a string (xml)
     """
+    info('xml: %s' % xml)
 
-    return '<tobedone>foo</tobedone>'
+    headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    xml = urllib.urlencode({'xml': xml})
+    request = urllib2.Request(api_url, xml, headers)
+
+    handle = urllib2.urlopen(request)
+
+    response = handle.read()
+    info('Silverpop API response: %s' % response)
+    return response
 
 # vim: set ft=python ts=4 sw=4 expandtab :
