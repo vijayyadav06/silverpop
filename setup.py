@@ -5,7 +5,7 @@ import os
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '0.1dev'
+version = '0.1'
 
 
 long_description = (
@@ -35,7 +35,7 @@ setup(name='silverpop',
       keywords='Silverpop API',
       author='Hans-Peter Locher',
       author_email='hans-peter.locher@inquant.de',
-      url='https://silverpop.googlecode.com/svn/trunk',
+      url='https://silverpop.googlecode.com/svn/tags/0.1',
       license='GPL',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
