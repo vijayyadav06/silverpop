@@ -99,7 +99,7 @@ def is_opted_in(api_url, list_id, email):
     result = response.lower()
     if '<success>false</success>' in result:
         return False
-    elif '<OptedOut/>' in result:
+    elif '<optedout/>' in result:
         return True
     else:
         return False
@@ -121,9 +121,11 @@ def opt_out_recipient(api_url, list_id, email):
     return simple_submit(api_url, xml)
 
 
-def select_recipient_data(api_url, list_id, email, columns=[]):
+def select_recipient_data(api_url, list_id, email, column=None):
     """get the recipients data
        api_url, list_id, email are required
+       you may specify a column dict for non email key lists, like
+       {'column_name': 'USER_ID', 'column_value': '4711'}
        returns the silverpop response (xml)
     """
     parts = []
@@ -134,7 +136,7 @@ def select_recipient_data(api_url, list_id, email, columns=[]):
        <EMAIL>%s</EMAIL>""" % (list_id, email)
           )
 
-    for column in columns:
+    if column:
         parts.append("""
        <COLUMN>
          <NAME>%s</NAME>
@@ -154,7 +156,7 @@ def select_recipient_data(api_url, list_id, email, columns=[]):
 def xml_request(api_url, xml):
     """submit a custom xml request
        api_url, xml, are required
-       returns a string (xml)
+       returns the silverpop response (xml)
     """
     info('xml: %s' % xml)
 
