@@ -1,9 +1,10 @@
 Changelog
 *********
 
-trunk (0.2dev)
---------------
+0.2 (2009-05-12)
+----------------
 
+- added doctest [hplocher]
 - refactored [hplocher]
 - implemented xml_request(api_url, xml) [hplocher]
 

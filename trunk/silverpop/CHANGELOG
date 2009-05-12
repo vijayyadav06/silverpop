@@ -8,6 +8,7 @@
     * api.py (add_recipient, opt_out_recipient): 
 		refactored uses submit_to silverpop, which now takes the api_url,
 		xml)
+    * README.txt: add doctest for api methods
 
 2009-05-11  Hans-Peter Locher <hans-peter.locher@inquant.de>
 

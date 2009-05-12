@@ -5,13 +5,15 @@ import os
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '0.2dev'
+version = '0.2'
 
 
 long_description = (
     read('README.txt')
     + '\n' +
     read('CHANGES.txt')
+    + '\n' +
+    read('silverpop', 'README.txt')
     + '\n' +
     'Contributors\n'
     '************\n'
@@ -35,11 +37,12 @@ setup(name='silverpop',
       keywords='Silverpop API',
       author='Hans-Peter Locher',
       author_email='hans-peter.locher@inquant.de',
-      url='https://silverpop.googlecode.com/svn/tags/0.1',
+      url='https://silverpop.googlecode.com/svn/tags/0.2',
       license='GPL',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
+      test_suite = 'silverpop.tests.test_docs.test_suite',
       install_requires=[
           # -*- Extra requirements: -*-
       ],

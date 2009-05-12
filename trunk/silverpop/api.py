@@ -33,8 +33,14 @@ def info(msg):
     logging.getLogger(LOGGER).info(msg)
 
 
-def submit_to_silverpop(api_url, xml):
-    """submit a request to silverpop"""
+def simple_submit(api_url, xml):
+    """submit a request to silverpop
+       api_url, xml are required
+       intended to be used, when the response of
+       silverpop doesn't need to be interpreted further
+       returns True, if the API request was successful,
+       otherwise False
+    """
     response = xml_request(api_url, xml)
     result = response.lower()
     if '<success>true</success>' in result:
@@ -81,7 +87,7 @@ def add_recipient(api_url, list_id, email, columns=[]):
 </Envelope>"""
         )
     xml = "".join(parts)
-    return submit_to_silverpop(api_url, xml)
+    return simple_submit(api_url, xml)
 
 
 def is_opted_in(api_url, list_id, email):
@@ -106,7 +112,7 @@ def opt_out_recipient(api_url, list_id, email):
     </OptOutRecipient>
   </Body>
 </Envelope>""" % (list_id, email)
-    return submit_to_silverpop(api_url, xml)
+    return simple_submit(api_url, xml)
 
 
 def select_recipient_data(api_url, list_id, email, columns=[]):
@@ -134,5 +140,6 @@ def xml_request(api_url, xml):
     response = handle.read()
     info('Silverpop API response: %s' % response)
     return response
+
 
 # vim: set ft=python ts=4 sw=4 expandtab :
