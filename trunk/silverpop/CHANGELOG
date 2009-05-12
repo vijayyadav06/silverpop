@@ -1,3 +1,14 @@
+2009-05-12  Hans-Peter Locher <hans-peter.locher@inquant.de>
+
+    * api.py (xml_request): 
+		implemented, returns silverpop api response (xml)
+    * api.py (submit_to_silverpop):
+		refactored , now needs argument api_url,
+		uses xml_request now
+    * api.py (add_recipient, opt_out_recipient): 
+		refactored uses submit_to silverpop, which now takes the api_url,
+		xml)
+
 2009-05-11  Hans-Peter Locher <hans-peter.locher@inquant.de>
 
     * api.py (add_recipient): 
