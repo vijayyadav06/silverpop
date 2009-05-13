@@ -13,6 +13,19 @@ Currently implemented API methods::
            returns True or False
         """
 
+    def update_recipient(api_url, list_id, old_email, columns=[]):
+        """Update recipient of a list,
+           if the old_email is not a recipient of the list, a recipient will be added.
+           api_url, list_id, old_email are required, optionally
+           takes a list of dicts to define additional columns like:
+           [{'column_name':'State', 'column_value':'Germany'},]
+           Can change the email of a recipient by specifiying a column like:
+           {'column_name':'EMAIL', 'column_value':'new@email.com'}
+           Can re-opt-in an opted-out recipient by specifying a column like:
+           {'column_name':'OPT_OUT', 'column_value':'False'}
+           returns True or False
+        """
+
     def is_opted_in(api_url, list_id, email):
         """Is the specified email opted in to the list?
            api_url, list_id, email are required
