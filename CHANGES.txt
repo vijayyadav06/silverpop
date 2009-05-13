@@ -1,8 +1,8 @@
 Changelog
 *********
 
-trunk (0.4dev)
---------------
+0.4 (2009-05-13)
+----------------
 
 - implemented api method:
     update_recipient(api_url, list_id, old_email, columns=[])
