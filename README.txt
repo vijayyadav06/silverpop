@@ -26,6 +26,14 @@ Currently implemented API methods::
            returns True or False
         """
 
+    def opt_in_recipient(api_url, list_id, email, columns=[]):
+        """opt in a recipient to a list (only email key supported)
+           api_url, list_id, email are required, optionally
+           takes a list of dicts to define additional columns like
+           [{'column_name':'State', 'column_value':'Germany'},]
+           returns True or False
+        """
+
     def is_opted_in(api_url, list_id, email):
         """Is the specified email opted in to the list?
            api_url, list_id, email are required
