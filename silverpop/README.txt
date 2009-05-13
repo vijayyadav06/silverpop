@@ -1,5 +1,5 @@
 Detailed documentation
-======================
+**********************
 
 Test Setup
 ----------
