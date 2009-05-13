@@ -6,6 +6,8 @@ trunk (0.4dev)
 
 - implemented api method:
     update_recipient(api_url, list_id, old_email, columns=[])
+    opt_in_recipient(api_url, list_id, email, columns=[])
+    [hplocher]
 
 0.3 (2009-05-12)
 ----------------

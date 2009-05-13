@@ -143,6 +143,17 @@ def is_opted_in(api_url, list_id, email):
     else:
         return False
 
+def opt_in_recipient(api_url, list_id, email, columns=[]):
+    """opt in a recipient to a list (only email key supported)
+       api_url, list_id, email are required, optionally
+       takes a list of dicts to define additional columns like
+       [{'column_name':'State', 'column_value':'Germany'},]
+       returns True or False
+    """
+    columns = filter(lambda column:column['column_name'] != 'OPT_OUT', columns)
+    columns.insert(0, {'column_name': 'OPT_OUT', 'column_value': 'False'})
+    return update_recipient(api_url, list_id, email, columns)
+
 
 def opt_out_recipient(api_url, list_id, email):
     """opt out a recipient from a list

@@ -152,7 +152,7 @@ Let's call the update_recipient api with the required attributes::
 If we provide a list of columns, these will be used in the request, leading to columns in silverpop.
 This is also used to change the recipient's email address.
 
-For example, we want to change a the **email address**, therefore we need to specify one column **EMAIL**::
+For example, we want to change the **email address**, therefore we need to specify one column **EMAIL**::
 
     >>> columns = [{'column_name': 'EMAIL', 'column_value': 'new@email.com'}, ]
 
@@ -203,6 +203,95 @@ will re-opt-in the recipient::
         </Envelope>
         ---------------------------------------------------------------------------
         True
+
+opt_in_recipient
+++++++++++++++++
+
+This method is a wrapper around update_recipient_data,
+for explicitly opting in a recipient.
+
+Let's call the opt_in_recipient api with the required attributes::
+
+    >>> silverpop.opt_in_recipient(api_url, list_id, email)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <UpdateRecipient>
+          <LIST_ID>999</LIST_ID>
+          <CREATED_FROM>2</CREATED_FROM>
+          <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <COLUMN>
+            <NAME>OPT_OUT</NAME>
+            <VALUE>False</VALUE>
+          </COLUMN>
+        </UpdateRecipient>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    True
+
+If we provide a list of columns, these will be used in the request, 
+leading to columns in silverpop.
+This can be also used to change the recipient's email address.
+For example, we want to change the **email address**.
+Therefore we need to specify one column **EMAIL**::
+
+    >>> columns = [{'column_name': 'EMAIL', 'column_value': 'new@email.com'}, ]
+
+    >>> silverpop.opt_in_recipient(api_url, list_id, email, columns)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <UpdateRecipient>
+          <LIST_ID>999</LIST_ID>
+          <CREATED_FROM>2</CREATED_FROM>
+          <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <COLUMN>
+            <NAME>OPT_OUT</NAME>
+            <VALUE>False</VALUE>
+          </COLUMN>
+          <COLUMN>
+            <NAME>EMAIL</NAME>
+            <VALUE>new@email.com</VALUE>
+          </COLUMN>
+        </UpdateRecipient>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    True
+
+If the user specifies an **OPT_OUT** column, this will be ignored,
+as we always want to opt in.
+
+Let's define the to be ignored column::
+
+    >>> columns = [{'column_name': 'OPT_OUT', 'column_value': 'some value'}, ]
+
+Notice how the value of **OPT_OUT** is still **False**::
+
+    >>> silverpop.opt_in_recipient(api_url, list_id, email)
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <UpdateRecipient>
+          <LIST_ID>999</LIST_ID>
+          <CREATED_FROM>2</CREATED_FROM>
+          <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <COLUMN>
+            <NAME>OPT_OUT</NAME>
+            <VALUE>False</VALUE>
+          </COLUMN>
+        </UpdateRecipient>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    True
 
 opt_out_recipient
 +++++++++++++++++
