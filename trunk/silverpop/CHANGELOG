@@ -1,6 +1,8 @@
 2009-05-13  Hans-Peter Locher <hans-peter.locher@inquant.de>
 
     * README.txt: fix header levels
+    * api.py (update_recipient):
+		implemented
 
 2009-05-12  Hans-Peter Locher <hans-peter.locher@inquant.de>
 
