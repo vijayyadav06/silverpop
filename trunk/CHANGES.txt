@@ -4,7 +4,7 @@ Changelog
 trunk (0.5dev)
 --------------
 
-- no changes yet
+- Changed log level to DEBUG [hplocher]
 
 0.4 (2009-05-13)
 ----------------

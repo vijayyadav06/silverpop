@@ -29,8 +29,8 @@ import logging
 LOGGER="silverpop"
 
 
-def info(msg):
-    logging.getLogger(LOGGER).info(msg)
+def log(msg):
+    logging.getLogger(LOGGER).debug(msg)
 
 
 def simple_submit(api_url, xml):
@@ -208,7 +208,7 @@ def xml_request(api_url, xml):
        api_url, xml, are required
        returns the silverpop response (xml)
     """
-    info('xml: %s' % xml)
+    log('xml: %s' % xml)
 
     headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
     xml = urllib.urlencode({'xml': xml})
@@ -217,7 +217,7 @@ def xml_request(api_url, xml):
     handle = urllib2.urlopen(request)
 
     response = handle.read()
-    info('Silverpop API response: %s' % response)
+    log('Silverpop API response: %s' % response)
     return response
 
 

@@ -1,3 +1,7 @@
+2009-05-18  Hans-Peter Locher <hans-peter.locher@inquant.de>
+
+    * api.py: change log level to debug
+
 2009-05-13  Hans-Peter Locher <hans-peter.locher@inquant.de>
 
     * README.txt: fix header levels
