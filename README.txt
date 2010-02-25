@@ -5,15 +5,20 @@ Python implementation of the Silverpop API
 
 Currently implemented API methods::
 
-    def add_recipient(api_url, list_id, email, columns=[]):
+    def add_recipient(api_url, list_id, email, columns=[], optionals=ADD_RECIPIENT_OPTIONALS):
         """Add recipient to a list (only email key supported)
            api_url, list_id, email are required, optionally
            takes a list of dicts to define additional columns like
            [{'column_name':'State', 'column_value':'Germany'},]
+           optionally takes a list of dicts to define optionals, 
+           defaults to
+           [{'optional_name':'UPDATE_IF_FOUND', 'optional_value':'true'},
+            {'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},
+           ]
            returns True or False
         """
 
-    def update_recipient(api_url, list_id, old_email, columns=[]):
+    def update_recipient(api_url, list_id, old_email, columns=[], optionals=UPDATE_RECIPIENT_OPTIONALS):
         """Update recipient of a list,
            if the old_email is not a recipient of the list, a recipient will be added.
            api_url, list_id, old_email are required, optionally
@@ -23,14 +28,21 @@ Currently implemented API methods::
            {'column_name':'EMAIL', 'column_value':'new@email.com'}
            Can re-opt-in an opted-out recipient by specifying a column like:
            {'column_name':'OPT_OUT', 'column_value':'False'}
+           optionally takes a list of dicts to define optionals, 
+           defaults to
+           [{'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
            returns True or False
         """
 
-    def opt_in_recipient(api_url, list_id, email, columns=[]):
+    def opt_in_recipient(api_url, list_id, email, columns=[], optionals=OPT_IN_RECIPIENT_OPTIONALS):
         """opt in a recipient to a list (only email key supported)
            api_url, list_id, email are required, optionally
            takes a list of dicts to define additional columns like
            [{'column_name':'State', 'column_value':'Germany'},]
+           returns True or False
+           optionally takes a list of dicts to define optionals, 
+           defaults to
+           [{'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
            returns True or False
         """
 
