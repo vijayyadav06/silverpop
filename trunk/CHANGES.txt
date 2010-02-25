@@ -1,16 +1,16 @@
 Changelog
 *********
 
-trunk (0.6dev)
---------------
+0.6 (2010-02-25)
+----------------
 
 - api methods update_recipient, opt_in_recipient,
   add_recipient now set a optional node in created xml requests
   **<SEND_AUTOREPLY>true</SEND_AUTOREPLY>**
-
 - extended api_methods update_recipient, opt_in_recipient,
   add_recipient with optional parameter 
   optionals to control optional nodes.
+  [hplocher]
 
 0.5 (2009-05-18)
 ----------------
