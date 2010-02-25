@@ -81,6 +81,7 @@ Let's call the add_recipient api with the required attributes::
               <LIST_ID>999</LIST_ID>
               <CREATED_FROM>2</CREATED_FROM>
               <UPDATE_IF_FOUND>true</UPDATE_IF_FOUND>
+              <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
               <COLUMN>
                 <NAME>EMAIL</NAME>
                 <VALUE>my@email.com</VALUE>
@@ -107,6 +108,7 @@ For example, we want to use a custom column **gender**::
               <LIST_ID>999</LIST_ID>
               <CREATED_FROM>2</CREATED_FROM>
               <UPDATE_IF_FOUND>true</UPDATE_IF_FOUND>
+              <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
               <COLUMN>
                 <NAME>EMAIL</NAME>
                 <VALUE>my@email.com</VALUE>
@@ -120,6 +122,64 @@ For example, we want to use a custom column **gender**::
         </Envelope>
         ---------------------------------------------------------------------------
         True
+
+Note that we have some optional nodes (UPDATE_IF_FOUND, SEND_AUTOREPLY) in the created requests.
+These are default. To change this we can use an additional parameter optionals.
+
+Let's call the add_recipient api with the additional optionals attribute to omit the **SEND_AUTOREPLY**::
+
+     >>> custom_optionals = [{'optional_name':'UPDATE_IF_FOUND', 'optional_value':'true'},]
+     >>> silverpop.add_recipient(api_url, list_id, email, optionals=custom_optionals)
+        ------------------------------request details------------------------------
+        http://api1.silverpop.com/XMLAPI
+        {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+        <Envelope>
+          <Body>
+            <AddRecipient>
+              <LIST_ID>999</LIST_ID>
+              <CREATED_FROM>2</CREATED_FROM>
+              <UPDATE_IF_FOUND>true</UPDATE_IF_FOUND>
+              <COLUMN>
+                <NAME>EMAIL</NAME>
+                <VALUE>my@email.com</VALUE>
+              </COLUMN>
+            </AddRecipient>
+          </Body>
+        </Envelope>
+        ---------------------------------------------------------------------------
+        True
+
+The **SEND_AUTOREPLY** node is gone.
+
+Of course you can use this together with columns::
+
+    >>> columns = [{'column_name': 'gender', 'column_value': 'male'}, ]
+
+    >>> silverpop.add_recipient(api_url, list_id, email, columns, optionals=custom_optionals)
+        ------------------------------request details------------------------------
+        http://api1.silverpop.com/XMLAPI
+        {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+        <Envelope>
+          <Body>
+            <AddRecipient>
+              <LIST_ID>999</LIST_ID>
+              <CREATED_FROM>2</CREATED_FROM>
+              <UPDATE_IF_FOUND>true</UPDATE_IF_FOUND>
+              <COLUMN>
+                <NAME>EMAIL</NAME>
+                <VALUE>my@email.com</VALUE>
+              </COLUMN>
+              <COLUMN>
+                <NAME>gender</NAME>
+                <VALUE>male</VALUE>
+              </COLUMN>
+            </AddRecipient>
+          </Body>
+        </Envelope>
+        ---------------------------------------------------------------------------
+        True
+
+The **SEND_AUTOREPLY** node is gone.
 
 update_recipient
 ++++++++++++++++
@@ -143,6 +203,7 @@ Let's call the update_recipient api with the required attributes::
               <LIST_ID>999</LIST_ID>
               <CREATED_FROM>2</CREATED_FROM>
               <OLD_EMAIL>my@email.com</OLD_EMAIL>
+              <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
             </UpdateRecipient>
           </Body>
         </Envelope>
@@ -166,6 +227,7 @@ For example, we want to change the **email address**, therefore we need to speci
               <LIST_ID>999</LIST_ID>
               <CREATED_FROM>2</CREATED_FROM>
               <OLD_EMAIL>my@email.com</OLD_EMAIL>
+              <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
               <COLUMN>
                 <NAME>EMAIL</NAME>
                 <VALUE>new@email.com</VALUE>
@@ -194,6 +256,7 @@ will re-opt-in the recipient::
               <LIST_ID>999</LIST_ID>
               <CREATED_FROM>2</CREATED_FROM>
               <OLD_EMAIL>my@email.com</OLD_EMAIL>
+              <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
               <COLUMN>
                 <NAME>OPT_OUT</NAME>
                 <VALUE>False</VALUE>
@@ -203,6 +266,58 @@ will re-opt-in the recipient::
         </Envelope>
         ---------------------------------------------------------------------------
         True
+
+Note that we have an optional node ( SEND_AUTOREPLY ) in the created requests.
+This is default. To change this we can use an additional parameter optionals.
+
+
+    >>> old_email = 'my@email.com'
+
+Let's call the update_recipient api with the additional optionals attribute to omit the **SEND_AUTOREPLY**::
+
+     >>> silverpop.update_recipient(api_url, list_id, old_email, optionals=[])
+        ------------------------------request details------------------------------
+        http://api1.silverpop.com/XMLAPI
+        {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+        <Envelope>
+          <Body>
+            <UpdateRecipient>
+              <LIST_ID>999</LIST_ID>
+              <CREATED_FROM>2</CREATED_FROM>
+              <OLD_EMAIL>my@email.com</OLD_EMAIL>
+            </UpdateRecipient>
+          </Body>
+        </Envelope>
+        ---------------------------------------------------------------------------
+        True
+
+The **SEND_AUTOREPLY** node is gone.
+
+Of course you can use this together with columns::
+
+    >>> columns = [{'column_name': 'EMAIL', 'column_value': 'new@email.com'}, ]
+
+    >>> silverpop.update_recipient(api_url, list_id, old_email, columns, optionals=[])
+        ------------------------------request details------------------------------
+        http://api1.silverpop.com/XMLAPI
+        {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+        <Envelope>
+          <Body>
+            <UpdateRecipient>
+              <LIST_ID>999</LIST_ID>
+              <CREATED_FROM>2</CREATED_FROM>
+              <OLD_EMAIL>my@email.com</OLD_EMAIL>
+              <COLUMN>
+                <NAME>EMAIL</NAME>
+                <VALUE>new@email.com</VALUE>
+              </COLUMN>
+            </UpdateRecipient>
+          </Body>
+        </Envelope>
+        ---------------------------------------------------------------------------
+        True
+
+The **SEND_AUTOREPLY** node is gone.
 
 opt_in_recipient
 ++++++++++++++++
@@ -222,6 +337,7 @@ Let's call the opt_in_recipient api with the required attributes::
           <LIST_ID>999</LIST_ID>
           <CREATED_FROM>2</CREATED_FROM>
           <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
           <COLUMN>
             <NAME>OPT_OUT</NAME>
             <VALUE>False</VALUE>
@@ -250,6 +366,7 @@ Therefore we need to specify one column **EMAIL**::
           <LIST_ID>999</LIST_ID>
           <CREATED_FROM>2</CREATED_FROM>
           <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
           <COLUMN>
             <NAME>OPT_OUT</NAME>
             <VALUE>False</VALUE>
@@ -283,6 +400,7 @@ Notice how the value of **OPT_OUT** is still **False**::
           <LIST_ID>999</LIST_ID>
           <CREATED_FROM>2</CREATED_FROM>
           <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <SEND_AUTOREPLY>true</SEND_AUTOREPLY>
           <COLUMN>
             <NAME>OPT_OUT</NAME>
             <VALUE>False</VALUE>
@@ -292,6 +410,66 @@ Notice how the value of **OPT_OUT** is still **False**::
     </Envelope>
     ---------------------------------------------------------------------------
     True
+
+Note that we have an optional node ( SEND_AUTOREPLY ) in the created requests.
+This is default. To change this we can use an additional parameter optionals.
+
+
+    >>> old_email = 'my@email.com'
+
+Let's call the opt_in_recipient api with the additional optionals attribute to omit the **SEND_AUTOREPLY**::
+
+    >>> silverpop.opt_in_recipient(api_url, list_id, email, optionals=[])
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <UpdateRecipient>
+          <LIST_ID>999</LIST_ID>
+          <CREATED_FROM>2</CREATED_FROM>
+          <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <COLUMN>
+            <NAME>OPT_OUT</NAME>
+            <VALUE>False</VALUE>
+          </COLUMN>
+        </UpdateRecipient>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    True
+
+The **SEND_AUTOREPLY** node is gone.
+
+Of course you can use this together with columns::
+
+    >>> columns = [{'column_name': 'EMAIL', 'column_value': 'new@email.com'}, ]
+
+    >>> silverpop.opt_in_recipient(api_url, list_id, email, columns, optionals=[])
+    ------------------------------request details------------------------------
+    http://api1.silverpop.com/XMLAPI
+    {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    <Envelope>
+      <Body>
+        <UpdateRecipient>
+          <LIST_ID>999</LIST_ID>
+          <CREATED_FROM>2</CREATED_FROM>
+          <OLD_EMAIL>my@email.com</OLD_EMAIL>
+          <COLUMN>
+            <NAME>OPT_OUT</NAME>
+            <VALUE>False</VALUE>
+          </COLUMN>
+          <COLUMN>
+            <NAME>EMAIL</NAME>
+            <VALUE>new@email.com</VALUE>
+          </COLUMN>
+        </UpdateRecipient>
+      </Body>
+    </Envelope>
+    ---------------------------------------------------------------------------
+    True
+
+The **SEND_AUTOREPLY** node is gone.
 
 opt_out_recipient
 +++++++++++++++++

@@ -27,6 +27,12 @@ import urllib2
 import logging
 
 LOGGER="silverpop"
+ADD_RECIPIENT_OPTIONALS = [{'optional_name':'UPDATE_IF_FOUND', 'optional_value':'true'},
+                           {'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
+
+UPDATE_RECIPIENT_OPTIONALS = [{'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
+
+OPT_IN_RECIPIENT_OPTIONALS = [{'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
 
 
 def log(msg):
@@ -53,11 +59,16 @@ def simple_submit(api_url, xml):
         return False
 
 
-def add_recipient(api_url, list_id, email, columns=[]):
+def add_recipient(api_url, list_id, email, columns=[], optionals=ADD_RECIPIENT_OPTIONALS):
     """Add recipient to a list (only email key supported)
        api_url, list_id, email are required, optionally
        takes a list of dicts to define additional columns like
        [{'column_name':'State', 'column_value':'Germany'},]
+       optionally takes a list of dicts to define optionals, 
+       defaults to
+       [{'optional_name':'UPDATE_IF_FOUND', 'optional_value':'true'},
+        {'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},
+       ]
        returns True or False
     """
     parts = []
@@ -65,12 +76,19 @@ def add_recipient(api_url, list_id, email, columns=[]):
   <Body>
     <AddRecipient>
       <LIST_ID>%s</LIST_ID>
-      <CREATED_FROM>2</CREATED_FROM>
-      <UPDATE_IF_FOUND>true</UPDATE_IF_FOUND>
+      <CREATED_FROM>2</CREATED_FROM>""" % list_id
+          )
+
+    for optional in optionals:
+        parts.append("""
+      <%s>%s</%s>""" % (optional['optional_name'], optional['optional_value'], optional['optional_name'])
+              )
+
+    parts.append("""
       <COLUMN>
         <NAME>EMAIL</NAME>
         <VALUE>%s</VALUE>
-      </COLUMN>""" % (list_id, email)
+      </COLUMN>""" % email
           )
 
     for column in columns:
@@ -90,7 +108,7 @@ def add_recipient(api_url, list_id, email, columns=[]):
     return simple_submit(api_url, xml)
 
 
-def update_recipient(api_url, list_id, old_email, columns=[]):
+def update_recipient(api_url, list_id, old_email, columns=[], optionals=UPDATE_RECIPIENT_OPTIONALS):
     """Update recipient of a list,
        if the old_email is not a recipient of the list, a recipient will be added.
        api_url, list_id, old_email are required, optionally
@@ -100,6 +118,9 @@ def update_recipient(api_url, list_id, old_email, columns=[]):
        {'column_name':'EMAIL', 'column_value':'new@email.com'}
        Can re-opt-in an opted-out recipient by specifying a column like:
        {'column_name':'OPT_OUT', 'column_value':'False'}
+       optionally takes a list of dicts to define optionals, 
+       defaults to
+       [{'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
        returns True or False
     """
     parts = []
@@ -110,6 +131,11 @@ def update_recipient(api_url, list_id, old_email, columns=[]):
       <CREATED_FROM>2</CREATED_FROM>
       <OLD_EMAIL>%s</OLD_EMAIL>""" % (list_id, old_email)
           )
+
+    for optional in optionals:
+        parts.append("""
+      <%s>%s</%s>""" % (optional['optional_name'], optional['optional_value'], optional['optional_name'])
+              )
 
     for column in columns:
         parts.append("""
@@ -143,16 +169,20 @@ def is_opted_in(api_url, list_id, email):
     else:
         return False
 
-def opt_in_recipient(api_url, list_id, email, columns=[]):
+def opt_in_recipient(api_url, list_id, email, columns=[], optionals=OPT_IN_RECIPIENT_OPTIONALS):
     """opt in a recipient to a list (only email key supported)
        api_url, list_id, email are required, optionally
        takes a list of dicts to define additional columns like
        [{'column_name':'State', 'column_value':'Germany'},]
        returns True or False
+       optionally takes a list of dicts to define optionals, 
+       defaults to
+       [{'optional_name':'SEND_AUTOREPLY', 'optional_value':'true'},]
+       returns True or False
     """
     columns = filter(lambda column:column['column_name'] != 'OPT_OUT', columns)
     columns.insert(0, {'column_name': 'OPT_OUT', 'column_value': 'False'})
-    return update_recipient(api_url, list_id, email, columns)
+    return update_recipient(api_url, list_id, email, columns, optionals)
 
 
 def opt_out_recipient(api_url, list_id, email):
